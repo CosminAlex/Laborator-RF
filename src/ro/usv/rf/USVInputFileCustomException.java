@@ -137,6 +137,27 @@ public class USVInputFileCustomException extends RuntimeException  {
 	   }
    }
    
-  
+	protected static void Euclidian(double[] p,double[] p2 ) {
+		// TODO Auto-generated method stub
+		double sum=0.00;
+    	double d=0.00;
+    	for(int k=0; k<p.length; k++)
+    	{
+    		sum+=(p[k]-p2[k])*(p[k]-p2[k]);
+    	}
+    	d=Math.sqrt(sum);
+    	System.out.print(d+" ");;
+	}
+	protected static double Euclidian1(double[] p,double[] p2 ) {
+		// TODO Auto-generated method stub
+		double sum=0.00;
+    	double d=0.00;
+    	for(int k=0; k<p.length-1; k++)
+    	{
+    		sum+=(p[k]-p2[k])*(p[k]-p2[k]);
+    	}
+    	d=Math.sqrt(sum);
+    	return d;
+	}
 
 }

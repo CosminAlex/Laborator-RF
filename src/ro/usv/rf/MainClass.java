@@ -2,9 +2,13 @@ package ro.usv.rf;
 
 
 import java.awt.BasicStroke;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import usv.FileUtils;
+import usv.USVInputFileCustomException;
 
 
 
@@ -157,6 +161,64 @@ public class MainClass {
 			USVInputFileCustomException.Cebisev3(learningSet,numberOfPatterns,numberOfFeatures);
 			USVInputFileCustomException.CityBlock2(learningSet,numberOfPatterns,numberOfFeatures);
 			USVInputFileCustomException.Mahalanobis2(learningSet,numberOfPatterns,numberOfFeatures);
+			
+			//Laborator4
+			System.out.println("LAB--4");
+			try {
+				learningSet = FileUtils.readLearningSetFromFile("in.txt");
+				int numberOfPatterns1 = learningSet.length;
+				int numberOfFeatures1 = learningSet[0].length -1;
+				System.out.println(String.format("The learning set has %s patters and %s features", numberOfPatterns1,
+						numberOfFeatures1));
+				double[][] matrix = new double[numberOfPatterns1][numberOfPatterns1];
+				// USVInputFileCustomException.calculateEuclidian(learningSet[0],learningSet[1]);
+				int counter = 0;
+				DecimalFormat df = new DecimalFormat("#.##");
+				for (int i = 0; i < numberOfPatterns1; i++) {
+					for (int j = i+1; j < numberOfPatterns1; j++) {
+						double euclidianDistance = USVInputFileCustomException.Euclidian1(learningSet[i], learningSet[j]);
+						counter++;
+						matrix[i][j] = euclidianDistance;
+						matrix[j][i] = euclidianDistance;
+
+					}
+
+				}
+				System.out.println(" --- > " + counter);
+				for (int i = 0; i < numberOfPatterns1; i++) {
+					for (int j = 0; j < numberOfPatterns1; j++) {
+						double value = Math.floor(matrix[i][j] * 100) / 100;
+						System.out.print(value + " ");
+
+					}
+					System.out.println();
+				}
+				System.out.println("\n\n");
+				double minDistance = Double.MAX_VALUE;
+				int lineToCalculateClass = learningSet.length-1;
+				int line=-1;
+				for (int j = 0; j<numberOfPatterns1; j++)
+				{if (j == lineToCalculateClass)
+					{
+						continue;
+					}
+					if(matrix[lineToCalculateClass][j] < minDistance )
+					{
+						minDistance= matrix[lineToCalculateClass][j];
+						line= j;
+					
+					}
+					
+				}
+				System.out.println("Class "+minDistance);
+				System.out.println("Class "+learningSet[line][learningSet[0].length -1]);
+				
+			} catch (USVInputFileCustomException e) {
+				System.out.println(e.getMessage());
+			} finally {
+				System.out.println("Finished learning set operations");
+			}
+		
    }
    
 }
