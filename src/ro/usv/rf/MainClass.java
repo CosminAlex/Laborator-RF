@@ -72,7 +72,17 @@ public class MainClass {
 			double featureAverage = StatisticsUtils.calculateFeatureAverage(feature);
 			System.out.println("Feature average is : " + featureAverage);
 		}
-	    
+	 // get weights from matrix - only after you add the new line !!!
+	 		// since the last column represent the weights, the number of features is now
+	 		// learningSet[0].length - 1
+	 		numberOfFeatures = learningSet[0].length - 1;
+
+	 		Double[] weights = new Double[numberOfForms];
+	 		for (int formIndex = 0; formIndex < numberOfForms; formIndex++) {
+	 			// weights are always located on the last column
+	 			int weightColumnIndex = learningSet[formIndex].length - 1;
+	 			weights[formIndex] = learningSet[formIndex][weightColumnIndex];
+	 		}
 	 // calculate Feature Weighted Average and feature dispersion
 	 		List<Double[]> featureList = new ArrayList<Double[]>();
 	 		double[] featureWeightedAverages = new double[numberOfFeatures];
@@ -89,12 +99,10 @@ public class MainClass {
 	 			featureWeightedAverages[featureIndex] = StatisticsUtils.calculateFeatureWeightedAverage(feature, weights);
 	 			System.out.println("Feature weighted average is : " + featureWeightedAverages[featureIndex]);
 
-	 			featureDispersions[featureIndex] = StatisticsUtils.calculateFeatureDispersion(feature,
-	 					featureWeightedAverages[featureIndex]);
+	 			featureDispersions[featureIndex] = StatisticsUtils.calculateFeatureDispersion(feature,featureWeightedAverages[featureIndex]);
 	 			System.out.println("Feature dispersion is : " + featureDispersions[featureIndex]);
 
-	 			averageSquareDeviations[featureIndex] = StatisticsUtils
-	 					.calculateAverageSquareDeviation(featureDispersions[featureIndex]);
+	 			averageSquareDeviations[featureIndex] = StatisticsUtils.calculateAverageSquareDeviation(featureDispersions[featureIndex]);
 	 			System.out.println("average Square Deviations is : " + averageSquareDeviations[featureIndex]);
 	 		}
 
