@@ -4,7 +4,9 @@ package ro.usv.rf;
 import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map; 
+import java.util.Map;
+
+
 
 
 public class MainClass {
@@ -53,6 +55,23 @@ public class MainClass {
 			 
 			 return normalizedLearningSet;  
 		 }
+	   
+	   private static double[][] autoscaleLearningSet(double[][] learningSet, double[] featureWeightedAverages) {
+			double[][] autoscaledLearningSet = new double[learningSet.length][];
+			int n = learningSet.length;
+			int m = learningSet[0].length - 1;
+			for(int i=0;i<n;i++)
+				autoscaledLearningSet[i] = new double[m];
+			for(int j=0;j<m;j++)
+			{
+				double partial_sum = 0;
+				for(int i=0;i<n;i++)
+					partial_sum += Math.pow(learningSet[j][i] - featureWeightedAverages[j], 2);
+				for(int i=0;i<n;i++)
+					autoscaledLearningSet[i][j] = (learningSet[j][i] - featureWeightedAverages[j])/partial_sum;
+			}
+			return autoscaledLearningSet;
+		}
 	   
    public static void main( String[ ] args ) {
 	   
@@ -128,25 +147,16 @@ public class MainClass {
 	 				featureDispersions[feature1Index], featureDispersions[feature2Index]);
 	 		System.out.println("corelation is : " + corelation);
 
-	 		FileUtils.writeLearningSetToFile("scaledSet.csv", autoscaleLearningSet(learningSet, featureWeightedAverages));
+	 		//FileUtils.writeLearningSetToFile("scaledSet.csv", autoscaleLearningSet(learningSet, featureWeightedAverages));
 	    
+	 		//Lab3
+	 		System.out.println("Laboratorul 3");
+	 		int numberOfPatterns = learningSet.length;
+			System.out.println(String.format("The learning set has %s patters and %s features", numberOfPatterns, numberOfFeatures));
+	 		USVInputFileCustomException.Euclidan(learningSet,numberOfPatterns,numberOfFeatures);
+			USVInputFileCustomException.Cebisev3(learningSet,numberOfPatterns,numberOfFeatures);
+			USVInputFileCustomException.CityBlock2(learningSet,numberOfPatterns,numberOfFeatures);
+			USVInputFileCustomException.Mahalanobis2(learningSet,numberOfPatterns,numberOfFeatures);
    }
    
-   private static double[][] autoscaleLearningSet(double[][] learningSet, double[] featureWeightedAverages) {
-		double[][] autoscaledLearningSet = new double[learningSet.length][];
-		int n = learningSet.length;
-		int m = learningSet[0].length - 1;
-		for(int i=0;i<n;i++)
-			autoscaledLearningSet[i] = new double[m];
-		for(int j=0;j<m;j++)
-		{
-			double partial_sum = 0;
-			for(int i=0;i<n;i++)
-				partial_sum += Math.pow(learningSet[j][i] - featureWeightedAverages[j], 2);
-			for(int i=0;i<n;i++)
-				autoscaledLearningSet[i][j] = (learningSet[j][i] - featureWeightedAverages[j])/partial_sum;
-		}
-		return autoscaledLearningSet;
-	}
-
 }
